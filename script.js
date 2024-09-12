@@ -3,20 +3,22 @@ const commandInput = document.getElementById('command');
 
 // Game variables
 let currentLocation = 'forest';
+let inventory = [];
+
 const locations = {
     'cave entrance': {
         description: "You stand before a dark cave. \nEnter?",
         exits: {
             'yes': 'dark cave',
             'north': 'forest'
-
-        }
+        } 
     },
     'forest': {
-        description: "You are in a quiet forest. Exits are: 'south', 'east'.",
+        description: "You are in a quiet forest. You see lights flickering in the east, while a strong breeze enters north",
         exits: {
             'south': 'cave entrance',
-            'east': 'mountain'
+            'east': 'mountain',
+            'north': 'narrow sea'
         }
     },
     'mountain': {
@@ -29,6 +31,13 @@ const locations = {
         description: "You stand inside a dark cave, unable to see \nGo back?",
         exits: {
             'yes': 'cave entrance'
+        }
+    },
+    'narrow sea': {
+        description: "a neverending narrow sea. Further north is a dimly lit beach",
+        exits: {
+            'north': 'beach',
+            'return': 'return'
         }
     }
 };
