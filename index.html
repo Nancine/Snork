@@ -3,18 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Adventure Game</title>
+    <title>Snork</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: rgb(30, 29, 29);}
-        #game { width: 50%; margin: auto; padding: 10px; background-color: #fff; border-radius: 8px; }
-        #output { min-height: 300px; white-space: pre-wrap; background-color: rgb(116, 145, 130); }
-        input { width: 90%; padding: 8px; margin-top: 8px; }
+        body { 
+            font-size: large; 
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; 
+            background-color: rgb(0, 0, 0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+        }
+
+        #game { 
+            width: 50%; 
+            padding: 10px; 
+            background-color: #fff; 
+            border-radius: 8px; 
+            text-align: center;
+        }
+        
+        #output { 
+            min-height: 300px; 
+            padding-left: 10px;
+            padding-right: 10px; 
+            padding-top: 10px; 
+            white-space: pre-wrap; 
+            background-color: rgb(37, 37, 37); 
+            padding-top: 20px; 
+            margin-bottom: 16px;
+        }
+
+        input { 
+            width: 90%; 
+            padding: 8px; 
+            margin-top: 8px; 
+            margin: 8px auto; 
+        }
+
     </style>
 </head>
 <body>
     <div id="game">
         <div id="output"></div>
-        <input type="text" id="command" placeholder="Enter command" />
+        <input type="text" id="command" placeholder="..." />
     </div>
     <script src="script.js"></script>
 </body>
