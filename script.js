@@ -71,7 +71,7 @@ const locations = {
         items: ['key']  // The key is here
     },
     'hill': {
-        description: "You are standing on a small hill. The view is breathtaking, with the forest stretching out below. Exits are: 'west'.",
+        description: "You are standing on a small hill. The view is breathtaking, with the forest stretching out below. In the north, a light shines across the distant dark. To the south, darkness far beyond the eye can see.",
         exits: {
             'west': 'forest'
         }
@@ -96,22 +96,24 @@ const locations = {
 function showLocation() {
     let location = locations[currentLocation];
     output.textContent = location.description;
-
-    
 }
 
 // Function to handle picking up items
 // NB! I need to adjust so that it won't reveal what items is there until you type "take". 
 //Or alternatively, describe it in the description rather than keeping it a secret. 
-function takeItem(item) {
+// Function to handle picking up items
+// Function to handle picking up items
+function takeItem() {
     let location = locations[currentLocation];
-    
-    if (location.items && location.items.includes(item)) {  // Check for items
+
+    // Check if the location has any items
+    if (location.items && location.items.length > 0) {
+        const item = location.items[0];  // Assume the first item is what the player is taking
         inventory.push(item);  // Add the item to the player's inventory
-        location.items = location.items.filter(i => i !== item);  // Remove item from the location
-        output.textContent += `\nYou took a ${item}.`;
+        location.items = [];  // Remove the item from the location
+        output.textContent += `\nYou take the ${item}.`;  // Reveal the item only after taking it
     } else {
-        output.textContent += `\nThere is no ${item} here.`;
+        output.textContent += `\nThere is nothing to take here.`;  // No items to take
     }
 }
 
@@ -122,7 +124,7 @@ function useItem(item) {
         if (item === 'flashlight' && currentLocation === 'dark cave') {
             output.textContent += `\nYou use the flashlight to light up the cave.`;
         } else if (item === 'key' && currentLocation === 'beach') {  // Changed to 'beach'
-            output.textContent += `\nYou use the key to unlock something in the water.`;
+            output.textContent += `\nYou use the key on the door.`;
         } else {
             output.textContent += `\nYou can't use the ${item} here.`;
         }
@@ -137,24 +139,29 @@ function handleCommand(command) {
     // Convert input to lowercase, trim spaces, and split by spaces
     const inputWords = command.trim().toLowerCase().split(/\s+/);
 
-    // Check for movement commands (north, south, etc.)
+    // Handle movement commands (north, south, east, west, etc.)
     const currentExits = locations[currentLocation].exits;
     for (let direction in currentExits) {
         if (inputWords.includes(direction)) {
             currentLocation = currentExits[direction];
             showLocation();
-            return; // Exit after processing a valid direction
+            return;  // Exit after processing a valid direction
         }
     }
 
-    // Check if the command starts with "take" for picking up items
-    if (inputWords[0] === 'take' && inputWords.length > 1) {
-        const item = inputWords.slice(1).join(' ');  // Combine remaining words into item name
-        takeItem(item);
+    // Handle taking items (the player just types "take")
+    if (inputWords[0] === 'take') {
+        takeItem();  // Call the takeItem function
         return;
     }
 
-    // Check if the command starts with "use" for using items
+    // Handle the jump command
+    if (inputWords[0] === 'jump') {
+        output.textContent += `\nYou jump. Now what?`;
+        return;
+    }
+
+    // Handle using items (if applicable)
     if (inputWords[0] === 'use' && inputWords.length > 1) {
         const item = inputWords.slice(1).join(' ');  // Combine remaining words into item name
         useItem(item);
@@ -163,7 +170,6 @@ function handleCommand(command) {
 
     // If no valid command is recognized
     output.textContent += `\nNothing happens.`;
-    //output.textContent += `\nYou jump. Now what?`;
 }
 
 

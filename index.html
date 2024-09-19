@@ -5,22 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snork</title>
     <style>
-        body { 
+       body { 
             font-size: large; 
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; 
-            background-color: rgb(0, 0, 0);
+            font-family: 'Courier New', Courier, monospace; /* Old-school font */
+            background-color: #000; /* Dark background */
+            color: #fff; /* White text */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            color: #fff;
         }
 
         #game { 
+            display: none; /* Initially hidden */
             width: 50%; 
             padding: 10px; 
-            background-color: #fff; 
+            background-color: #333; 
+            border: 2px solid #555; 
             border-radius: 8px; 
             text-align: center;
         }
@@ -31,9 +33,10 @@
             padding-right: 10px; 
             padding-top: 10px; 
             white-space: pre-wrap; 
-            background-color: rgb(37, 37, 37); 
+            background-color: #222; 
             padding-top: 20px; 
             margin-bottom: 16px;
+            color: #fff;
         }
 
         input { 
@@ -41,15 +44,86 @@
             padding: 8px; 
             margin-top: 8px; 
             margin: 8px auto; 
+            background-color: #222; 
+            border: 2px solid #555;
+            color: #fff;
+        }
+
+        #start-menu {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 4em;
+            margin-bottom: 50px;
+            color: #c2b7b5; /* Gothic crimson color for the title */
+            font-family: 'Courier New', Courier, monospace; /* Retro font */
+            text-shadow: 3px 3px 5px #000; /* Gothic shadow effect */
+        }
+
+        button {
+            background-color: #111; /* Dark button background */
+            color: #c2b7b5; /* Crimson text for gothic vibe */
+            padding: 15px 30px;
+            font-size: 1.5em;
+            border: 2px solid #555;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            width: 200px;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 2px 2px 4px #000;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.7); /* Shadow for depth */
+        }
+
+        button:hover {
+            background-color: #222; /* Slight change on hover */
+            border: 2px solid #888; /* Brighten border on hover */
+        }
+
+        button:active {
+            background-color: #000; /* Darken on click */
+            box-shadow: none;
         }
 
     </style>
 </head>
 <body>
+
+    <!-- Start Menu -->
+    <div id="start-menu">
+        <h1>Memory's Edge</h1>
+        <button id="play-btn">Play</button><br>
+        <button id="how-to-play-btn">How to Play</button>
+    </div>
+
+    <!-- Game Interface -->
     <div id="game">
         <div id="output"></div>
         <input type="text" id="command" placeholder="..." />
     </div>
+
+    <script>
+        const playButton = document.getElementById('play-btn');
+        const howToPlayButton = document.getElementById('how-to-play-btn');
+        const startMenu = document.getElementById('start-menu');
+        const game = document.getElementById('game');
+
+        // Event listener to start game
+        playButton.addEventListener('click', () => {
+            startMenu.style.display = 'none';  // Hide start menu
+            game.style.display = 'block';  // Show game interface
+        });
+
+        // Event listener for How-to-play
+        howToPlayButton.addEventListener('click', () => {
+            alert("There is something out there, in the dark\n\n" +
+                "- Navigate through this mysterious place with directions 'north', 'south', 'west', 'east'.\n" +
+                "- Discover items and interact with your surroundings with 'take', 'use' and 'exit'.\n");
+        });
+    </script>
+
     <script src="script.js"></script>
+
 </body>
 </html>
