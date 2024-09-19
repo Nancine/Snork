@@ -7,20 +7,55 @@ let inventory = [];
 
 const locations = {
     'forest': {
-        description: "You are in a quiet forest.",
+        description: "You are in a quiet forest. \n Do you go north, south, west or east?",
         exits: {
-            'north': 'lighthouse',
+            'north': 'lighthouse entrance',
             'west': 'narrow sea',
             'east': 'hill',
             'south': 'cave entrance'
         }
     },
-    'lighthouse': {
-        description: "You stand before a tall, weathered lighthouse overlooking the sea. The air is crisp and salty. Exits are: 'south'.",
+    'lighthouse entrance': {
+        description: "You stand before a tall, weathered lighthouse overlooking the sea. The air is crisp and salty. The door stands ajar, with a faint light streaming through the gap.",
         exits: {
-            'south': 'forest'
+            'south': 'forest',
+            'enter': 'lighthouse'
         }
     },
+
+    'lighthouse': {
+        description: "You stand inside a dimly lit room, with stairs leading up or down, the exit behind you",
+        exits: {
+            'exit': 'lighthouse entrance',
+            'up': 'upstairs room',
+            'down': 'downstairs room'
+        }
+        
+    },
+
+    'staircase': {
+        description: "The stairs seem endless. up or down?",
+        exits: { 
+            'up': 'upstairs room',
+            'down': 'lighthouse'
+        },
+    },
+
+    'upstairs room': {
+        description: 'You stand ontop of the Lighthouse, the view stretching as far as the eye can see. \nA mysterious door stands idle in the middle, faint strange sounds emit from beyond it. \nUpon closer inspection, it has 3 seperate looks, the first two requiring keys, while the last needs a three-digit code.',
+        exits: {
+            'exit': 'staircase' 
+        }
+    },
+
+    'downstairs room': {
+        description: 'You enter a cellar, with a dark object lying before you.',
+        exits: {
+            'exit': 'lighthouse',
+        },
+        items: ['flashlight']
+    },
+ 
     'narrow sea': {
         description: "You are at the edge of a narrow sea. The water stretches far into the horizon, with no land in sight. To the west, you can see a beach, and to the east is the forest.",
         exits: {
@@ -29,11 +64,11 @@ const locations = {
         }
     },
     'beach': {
-        description: "You stand on a sandy beach. The waves crash gently against the shore. Below the waters, you notice something shiny. Exits are: 'east' to the narrow sea.",
+        description: "You stand on a sandy beach. The waves crash gently against the shore. \nUpon closer inspection, you notice a shimmering key in the waters below.",
         exits: {
             'east': 'narrow sea'
         },
-        items: ['key']  // The shiny key is here
+        items: ['key']  // The key is here
     },
     'hill': {
         description: "You are standing on a small hill. The view is breathtaking, with the forest stretching out below. Exits are: 'west'.",
@@ -49,10 +84,10 @@ const locations = {
         }
     },
     'dark cave': {
-        description: "You are deep inside the dark cave. It's pitch black, and you can't see much without a light source. Exits are: 'north' back to the cave entrance.",
+        description: "You are deep inside the dark cave. It's pitch black, and you can't see much without a light source. 'North' leads back out of the cave.",
         exits: {
             'north': 'cave entrance'
-        }
+        }, 
     }
 };
 
@@ -62,19 +97,19 @@ function showLocation() {
     let location = locations[currentLocation];
     output.textContent = location.description;
 
-    if (location.items && location.items.length > 0) {  // Check if location has items
-        output.textContent += `\nItems here: ${location.items.join(', ')}.`;
-    }
+    
 }
 
 // Function to handle picking up items
+// NB! I need to adjust so that it won't reveal what items is there until you type "take". 
+//Or alternatively, describe it in the description rather than keeping it a secret. 
 function takeItem(item) {
     let location = locations[currentLocation];
     
     if (location.items && location.items.includes(item)) {  // Check for items
         inventory.push(item);  // Add the item to the player's inventory
         location.items = location.items.filter(i => i !== item);  // Remove item from the location
-        output.textContent += `\nYou took the ${item}.`;
+        output.textContent += `\nYou took a ${item}.`;
     } else {
         output.textContent += `\nThere is no ${item} here.`;
     }
