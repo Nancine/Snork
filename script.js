@@ -1,5 +1,6 @@
 const output = document.getElementById("output");
 const commandInput = document.getElementById("command");
+const locationImage = document.getElementById("location-image");
 
 // Game variables
 let currentLocation = "forest";
@@ -100,11 +101,28 @@ const locations = {
   },
 };
 
-// Function to show location description and items
 function showLocation() {
   let location = locations[currentLocation];
+
+  // Update text description
   output.textContent = location.description;
+
+  // Set the image based on the current location
+  let imageName = currentLocation.replace(/\s+/g, "_"); // Replace spaces with underscores for the image name
+  locationImage.src = `images/${imageName}.jpg`; // Assuming your images are stored in an 'images' folder
+  
+  // Display the image and make sure it's visible
+  locationImage.style.display = "block";
+  locationImage.style.width = "100%"; // Adjust the size as needed to fit the layout
+  locationImage.style.maxWidth = "600px"; // Optional max-width to avoid overly large images
+  locationImage.style.margin = "0 auto"; // Center the image
 }
+
+// Function to show location description and items
+//function showLocation() {
+//  let location = locations[currentLocation];
+//  output.textContent = location.description;
+//}
 
 // Function to handle picking up items
 // NB! I need to adjust so that it won't reveal what items is there until you type "take".
