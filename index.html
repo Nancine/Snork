@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snork</title>
     <style>
-       body { 
+        body { 
             font-size: large; 
-            font-family: 'Courier New', Courier, monospace; /* Old-school font */
-            background-color: #000; /* Dark background */
-            color: #fff; /* White text */
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #000;
+            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -18,33 +18,41 @@
         }
 
         #game { 
-            display: none; /* Initially hidden */
+            display: none;
             width: 50%; 
             padding: 10px; 
-            background-color: #333; 
+            background-color: #333;
             border: 2px solid #555; 
             border-radius: 8px; 
             text-align: center;
         }
-        
+
         #output { 
             min-height: 300px; 
             padding-left: 10px;
-            padding-right: 10px; 
-            padding-top: 10px; 
-            white-space: pre-wrap; 
-            background-color: #222; 
-            padding-top: 20px; 
+            padding-right: 10px;
+            padding-top: 10px;
+            white-space: pre-wrap;
+            background-color: #222;
+            padding-top: 20px;
             margin-bottom: 16px;
             color: #fff;
         }
 
+        #location-image {
+            display: block;
+            margin: 0 auto 20px auto;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+
         input { 
-            width: 90%; 
+            width: 90%;
             padding: 8px; 
             margin-top: 8px; 
             margin: 8px auto; 
-            background-color: #222; 
+            background-color: #222;
             border: 2px solid #555;
             color: #fff;
         }
@@ -56,14 +64,14 @@
         h1 {
             font-size: 4em;
             margin-bottom: 50px;
-            color: #c2b7b5; /* Gothic crimson color for the title */
-            font-family: 'Courier New', Courier, monospace; /* Retro font */
-            text-shadow: 3px 3px 5px #000; /* Gothic shadow effect */
+            color: #c2b7b5;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 3px 3px 5px #000;
         }
 
         button {
-            background-color: #111; /* Dark button background */
-            color: #c2b7b5; /* Crimson text for gothic vibe */
+            background-color: #111;
+            color: #c2b7b5;
             padding: 15px 30px;
             font-size: 1.5em;
             border: 2px solid #555;
@@ -73,16 +81,16 @@
             width: 200px;
             font-family: 'Courier New', Courier, monospace;
             text-shadow: 2px 2px 4px #000;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.7); /* Shadow for depth */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.7);
         }
 
         button:hover {
-            background-color: #222; /* Slight change on hover */
-            border: 2px solid #888; /* Brighten border on hover */
+            background-color: #222;
+            border: 2px solid #888;
         }
 
         button:active {
-            background-color: #000; /* Darken on click */
+            background-color: #000;
             box-shadow: none;
         }
 
@@ -99,6 +107,7 @@
 
     <!-- Game Interface -->
     <div id="game">
+        <img id="location-image" src="" alt="Location Image" style="display: none;">
         <div id="output"></div>
         <input type="text" id="command" placeholder="..." />
     </div>
