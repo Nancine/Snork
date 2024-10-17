@@ -7,7 +7,7 @@ let currentLocation = "forest";
 let inventory = [];
 
 const locations = {
-  "forest": {
+  forest: {
     description:
       "You awaken in a quiet forest. Next to you lies a portrait, with three people but their faces blurred. They seem familiar. \nYou realize you can't remember who or where you are. \nDo you go north, south, west or east?",
     exits: {
@@ -27,7 +27,7 @@ const locations = {
     },
   },
 
-  "lighthouse": {
+  lighthouse: {
     description:
       "You stand inside a dimly lit room, with stairs leading up or down, the exit behind you",
     exits: {
@@ -37,7 +37,7 @@ const locations = {
     },
   },
 
-  "staircase": {
+  staircase: {
     description: "The stairs seem endless. up or down?",
     exits: {
       up: "upstairs room",
@@ -50,7 +50,7 @@ const locations = {
       "You stand ontop of the Lighthouse, the view stretching as far as the eye can see. \nA mysterious door stands idle in the middle, faint strange sounds emit from beyond it. \nUpon closer inspection, it has 3 seperate locks, the first 2 requiring keys, while the last needs a three-digit code.",
     exits: {
       exit: "staircase",
-      enter: "memory",
+      enter: "dark room",
     },
   },
 
@@ -70,7 +70,7 @@ const locations = {
       west: "beach",
     },
   },
-  "beach": {
+  beach: {
     description:
       "You stand on a sandy beach. The waves crash gently against the shore. \nUpon closer inspection, you notice a shimmering key in the waters below.",
     exits: {
@@ -78,7 +78,7 @@ const locations = {
     },
     items: ["gold key"],
   },
-  "hill": {
+  hill: {
     description:
       "You are standing on a small hill. The view is breathtaking, with the forest stretching out below. \nIn the north, a light shines across the distant dark. To the south, darkness far beyond the eye can see.",
     exits: {
@@ -101,19 +101,18 @@ const locations = {
     },
     items: ["silver key"],
   },
-  "memory": {
-    description: "You enter the door, it's pitchblack. You can't see anything but something urges you to keep going forward.",
+  "dark room": {
+    description:
+      "You enter the door and stumble through the dark, blindly. In the distance you can finally see a small light clipping through the door up ahead. Enter? \nYES/NO",
     exits: {
-      forward: "dark door"
+      Yes: "meadow",
+      No: "upstairs room",
     },
   },
-  "dark door": {
-    description: "You stumble throuh the dark, blindly. In the distance you can finally see a small light clipping through the door up ahead. Enter? \nYES/NO"
+  meadow: {
+    description:
+      "You're blinded by sunlight, your vision blurred for a moment. \nYour vision clears, and you can see you are standing in a large flowery meadow, with the gentle sunlight dancing on your skin. \nThat's right. I remember now",
   },
-  "meadow": {
-    description: 
-    "You're blinded by sunlight, your vision blurred for a moment. \nYour vision clears, and you can see you are standing in a large flowery meadow, with the gentle sunlight dancing on your skin. \nThat's right. I remember now"
-  }
 };
 
 function showLocation() {
@@ -133,7 +132,7 @@ function showLocation() {
 // Function to pick up items
 function takeItem() {
   let location = locations[currentLocation];
-  
+
   if (location.items && location.items.length > 0) {
     const item = location.items[0]; // Assuming there's one item in the location
     inventory.push(item); // Add the item to the player's inventory
@@ -147,19 +146,26 @@ function takeItem() {
 // Function to unlock the door with keys
 function useItem(item) {
   if (inventory.includes(item)) {
+    // Check if using the flashlight in the dark cave
     if (item === "flashlight" && currentLocation === "dark cave") {
       output.textContent += `\nYou use the flashlight to light up the cave. A silver key shimmers before you.`;
       // Once the flashlight is used, the silver key becomes visible
       locations["dark cave"].description = "With the flashlight on, you can see clearly in the cave. A silver key shimmers before you.";
       locations["dark cave"].items = ["silver key"]; // Silver key is now available in the cave
+
     } else if (item === "flashlight" && currentLocation === "downstairs room") {
       output.textContent += `\nYou use the flashlight and see a code on the wall: 'Find what it cost, and retrieve what was lost.'`;
+
+    // Unlocking the silver padlock in the upstairs room
     } else if (item === "silver key" && currentLocation === "upstairs room" && !silverKeyUsed) {
       silverKeyUsed = true;
       output.textContent += `\nYou use the silver key to unlock the first padlock.`;
+
+    // Unlocking the gold padlock in the upstairs room
     } else if (item === "gold key" && currentLocation === "upstairs room" && !goldKeyUsed) {
       goldKeyUsed = true;
       output.textContent += `\nYou use the gold key to unlock the second padlock.`;
+
     } else {
       output.textContent += `\nThe ${item} has already been used or can't be used here.`;
     }
@@ -168,23 +174,48 @@ function useItem(item) {
   }
 }
 
-// Function to enter the door
+// Function to enter the door + variables to track if the padlocks are unlocked
+let silverKeyUsed = false;
+let goldKeyUsed = false;
+
 function enterDoor() {
-  if (currentLocation === "upstairs room" && silverKeyUsed && goldKeyUsed) {
-    if (inventory.includes("portrait")) {
-      currentLocation = "memory";
-      showLocation();
+  if (currentLocation === "upstairs room") {
+    // Check if both padlocks are unlocked and if the player has the portrait
+    if (silverKeyUsed && goldKeyUsed) {
+      if (inventory.includes("portrait")) {
+        currentLocation = "dark room"; // Allow entry to the dark room
+        showLocation();
+      } else {
+        output.textContent += "\nStrange forces hold you back. There is something missing."; // Portrait is missing
+      }
     } else {
-      output.textContent += "\nStrange forces hold you back. There is something missing.";
+      output.textContent += "\nThe door is still locked. You need to unlock both padlocks first."; // One or both padlocks are still locked
     }
   } else {
-    output.textContent += "\nThe door is still locked. You need to unlock both padlocks first.";
+    output.textContent += "\nYou can't enter anything here."; // Prevent "enter" in other locations
   }
 }
+
 
 // Function to handle commands
 function handleCommand(command) {
   const inputWords = command.trim().toLowerCase().split(/\s+/);
+
+  // Handle yes/no input in the dark room
+  if (currentLocation === "dark room") {
+    if (inputWords[0] === "yes") {
+      currentLocation = "meadow"; // Move to the meadow
+      showLocation();
+      return;
+    } else if (inputWords[0] === "no") {
+      currentLocation = "upstairs room"; // Return to upstairs room
+      showLocation();
+      return;
+    } else {
+      output.textContent += "\nPlease answer YES or NO.";
+      return;
+    }
+  }
 
   if (inputWords[0] === "use" && inputWords.length > 1) {
     const item = inputWords.slice(1).join(" ");
