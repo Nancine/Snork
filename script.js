@@ -47,7 +47,7 @@ const locations = {
 
   "upstairs room": {
     description:
-      "You stand ontop of the Lighthouse, the view stretching as far as the eye can see. \nA mysterious door stands idle in the middle, faint strange sounds emit from beyond it. \nUpon closer inspection, it has 3 seperate locks, the first 2 requiring keys, while the last needs a three-digit code.",
+      "You stand ontop of the Lighthouse, the view stretching as far as the eye can see. \nA mysterious door stands idle in the middle, faint strange sounds emit from beyond it. \nUpon closer inspection, it has 2 seperate locks, each requiring their own key.",
     exits: {
       exit: "staircase",
       enter: "dark room",
@@ -111,7 +111,7 @@ const locations = {
   },
   meadow: {
     description:
-      "You're blinded by sunlight, your vision blurred for a moment. \nYour vision clears, and you can see you are standing in a large flowery meadow, with the gentle sunlight dancing on your skin. \nThat's right. I remember now",
+      "You're blinded by sunlight, your vision blurred for a moment. \nYour vision clears, you stand in a large flowery meadow, with the gentle sunlight dancing on your skin. \nYou notice the faces in the portrait begin to clear...\n \nThat's right. I remember now.",
   },
 };
 
@@ -233,13 +233,17 @@ function handleCommand(command) {
     return;
   }
 
-  // Handle movement commands and other interactions
+  // Handle movement commands (north, south, east, west, etc.)
   const currentExits = locations[currentLocation].exits;
   for (let direction in currentExits) {
     if (inputWords.includes(direction)) {
+      if ((currentExits['enter']) === 'dark room') {
+        enterDoor();
+        return;
+      }
       currentLocation = currentExits[direction];
       showLocation();
-      return;
+      return; // Exit after processing a valid direction
     }
   }
 
